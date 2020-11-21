@@ -1,0 +1,4 @@
+*.pdf
+/cod/*.png
+/data/berlin.jpeg
+.idea/
