@@ -9,21 +9,21 @@ from cod.parameters import *
 from cod.resize_image import *
 import matplotlib.pyplot as plt
 
-image_name = '../data/castel.jpg'
+image_name = '../data/lac.jpg'
 params = Parameters(image_name)
 
 # seteaza optiunea de redimenionare
 # micsoreazaLatime, micsoreazaInaltime, amplificaContinut, eliminaObiect
-params.resize_option = 'micsoreazaLatime'
+params.resize_option = 'eliminaObiect'
 # numarul de pixeli pe latime
 params.num_pixels_width = 50
 # numarul de pixeli pe inaltime
-params.num_pixel_height = 50
+params.num_pixel_height = 100
 # afiseaza drumul eliminata
 params.show_path = True
 # metoda pentru alegerea drumului
 # aleator, greedy, programareDinamica
-params.method_select_path = 'greedy'
+params.method_select_path = 'programareDinamica'
 
 resized_image = resize_image(params)
 resized_image_opencv = cv.resize(params.image, (resized_image.shape[1], resized_image.shape[0]))
@@ -40,5 +40,5 @@ plt.xlabel('OpenCV')
 plt.subplot(1, 3, 3)
 plt.imshow(resized_image[:, :, [2, 1, 0]])
 plt.xlabel('My result')
-cv.imwrite('test.png', resized_image)
+cv.imwrite('lac_object.png', resized_image)
 plt.show()
