@@ -18,7 +18,7 @@ params.resize_option = 'eliminaObiect'
 # numarul de pixeli pe latime
 params.num_pixels_width = 50
 # numarul de pixeli pe inaltime
-params.num_pixel_height = 100
+params.num_pixel_height = 50
 # afiseaza drumul eliminata
 params.show_path = True
 # metoda pentru alegerea drumului
@@ -40,5 +40,5 @@ plt.xlabel('OpenCV')
 plt.subplot(1, 3, 3)
 plt.imshow(resized_image[:, :, [2, 1, 0]])
 plt.xlabel('My result')
-cv.imwrite('lac_object.png', resized_image)
+cv.imwrite('test.png', resized_image)
 plt.show()

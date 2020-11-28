@@ -18,4 +18,4 @@ class Parameters:
         self.show_path = False
         self.color_path = (0, 0, 255)
         self.method_select_path = 'greedy'
-        self.factor_amplification = 1.1
+        self.factor_amplification = 1.05

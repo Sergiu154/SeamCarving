@@ -79,7 +79,6 @@ def delete_path(img, path):
     for i in range(img.shape[0]):
         col = path[i][1]
         # copiem partea din stanga
-        # print("STERGEM COLOANA COL", col)
         updated_img[i, :col] = img[i, :col].copy()
         # copiem partea din dreapta
         updated_img[i, col:] = img[i, (col + 1):].copy()
@@ -124,16 +123,13 @@ def decrease_height(params: Parameters, num_pixels, roi=None):
 
 def delete_object(params: Parameters, x0, y0, w, h):
     if w < h:
+        # functia roi returneaza (y0,x0,w,h)
         return decrease_width(params, w, roi=(y0, x0, w, h))
     else:
-        new_x0 = y0  # r[1]
+        # rotind imaginea 90 grade clockwise avem
+        new_x0 = y0  # r[1]  noua coord.a linie = coordonata coloanei
         new_y0 = params.image.shape[0] - x0 - h  # r[0]
-        # colt stanga (b, a)
-        # r[2]  este r[3]
-        # r[3] este r[2]
-        # print("FROM", r, "TO", (b, a, r[3], r[2]))
-
-        # params.image = cv.rotate(params.image.copy(), cv.ROTATE_90_CLOCKWISE)
+        # noua coord. a coloanei devine (latimea(i.e fosta lungime) -
 
         return cv.rotate(decrease_height(params, h, roi=(new_y0, new_x0, h, w)),
                          cv.ROTATE_90_COUNTERCLOCKWISE)
@@ -179,9 +175,11 @@ def resize_image(params: Parameters):
         return amplify_content(params)
 
     elif params.resize_option == 'eliminaObiect':
-        r = cv.selectROI(params.image.astype(np.uint8))
+        r = cv.selectROI('Fereastra', params.image.astype(np.uint8))
 
         rez = delete_object(params, r[1], r[0], r[2], r[3])
+        # daca inaltimea ferestre e mai mica de latimea atunci roteste
+        # imaginea la loc la final
         if r[3] < r[2]:
             params.image = cv.rotate(params.image, cv.ROTATE_90_COUNTERCLOCKWISE)
         return rez

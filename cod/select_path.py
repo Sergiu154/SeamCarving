@@ -27,20 +27,27 @@ def select_random_path(E):
 
 def select_greedy_path(E):
     col = np.argmin(E[0, :])
+    # punctul de start
     row = 0
     path = [(row, col)]
     row += 1
     while row < E.shape[0]:
 
+        # alege vecinul cu valoarea ce mai mica dintre (v0,v1,v2)
+        # determinam un offset iar dupa il adunam la numarul coloanei
         offset = 0
         if col == 0:
+            # (v1,v2)
             offset = np.argmin(E[row, col:col + 2]) + 1
         elif col == E.shape[1] - 1:
+            # (v0,v1)
             offset = np.argmin(E[row, col - 1:col + 1])
 
         else:
+            # (v0,v1,v2)
             offset = np.argmin(E[row, col - 1:col + 2])
 
+        # pt (v0,v1,v2) avem deplasarile (-1,0,1)
         col += (offset - 1)
 
         path.append((row, col))
@@ -49,36 +56,37 @@ def select_greedy_path(E):
 
 
 def select_dynamic_programming_path(E):
-    # TODO: scrieti codul
     dp = np.copy(E)
-    # dp.dtype = 'float64'
+    # copiem prima linie din matricea de energie
     dp[0, :] = np.copy(E[0, :])
     n, m = E.shape
-    print("Linii", n, "Col", m)
     for i in range(1, n):
         for j in range(m):
+            # daca suntem pe prima coloana consideram doar vecinii stanga sus si dreapta sus
             if j == 0:
 
                 dp[i][j] += min(dp[i - 1][j], dp[i - 1][j + 1])
 
+            # ultima coloana doar stanga si deasupra
             elif j == m - 1:
                 dp[i][j] += min(dp[i - 1][j], dp[i - 1][j - 1])
-
+            # altfel toti cei trei vecini
             else:
                 dp[i][j] += min(dp[i - 1][j + 1], min(dp[i - 1][j], dp[i - 1][j - 1]))
 
-    print(dp.dtype)
     curr_row = dp.shape[0] - 1
     curr_col = np.argmin(dp[-1, :])
     path = [(curr_row, curr_col)]
 
-    print("MIN VAL", dp[curr_row][curr_col])
-
     while curr_row > 0:
+        # valorile vecinilor
         left = -1 if curr_col == 0 else dp[curr_row - 1][curr_col - 1]
         mid = dp[curr_row - 1][curr_col]
         right = -1 if curr_col == m - 1 else dp[curr_row - 1][curr_col + 1]
+
         current = dp[curr_row][curr_col]
+
+        # val precedenta
         prev = current - E[curr_row][curr_col]
 
         if prev == left:
